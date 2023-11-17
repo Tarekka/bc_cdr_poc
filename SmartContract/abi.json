@@ -51,6 +51,11 @@
 	{
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "originator",
+				"type": "address"
+			},
+			{
 				"internalType": "uint256",
 				"name": "uniqueId",
 				"type": "uint256"
@@ -60,18 +65,13 @@
 		"outputs": [
 			{
 				"internalType": "string",
-				"name": "",
+				"name": "hashValue",
 				"type": "string"
 			},
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "timestamp",
 				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
 			}
 		],
 		"stateMutability": "view",

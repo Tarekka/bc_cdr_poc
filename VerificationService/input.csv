@@ -1,0 +1,2 @@
+Id,Date,Time,MSISDN,CalledParty,CallDuration,ChargeDuration,CellId,CalledCellId
+1,2023-11-17,23:43,1234567890,9876543210,60,50,101,201

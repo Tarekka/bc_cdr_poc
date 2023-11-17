@@ -6,22 +6,20 @@ contract CdrContract {
     struct CdrData {
         string hashValue;
         uint256 timestamp;
-        address sender;
     }
 
     // Dictionary that stores CDRs, with their unique Ids as keys
-    mapping(uint256 => CdrData) private cdrs;
+    mapping(address => mapping(uint256 => CdrData)) private cdrs;
 
     // Event to emit when a new CDR is inserted
     event CdrInserted(uint256 indexed uniqueId, string hashValue, uint256 timestamp, address sender);
 
     // Function to insert a CDR - used by the producer service
     function insertCdr(uint256 uniqueId, string memory hashValue) public {
-        // Create a new CdrData struct and store it in the cdrs mapping with additional sender's address
-        cdrs[uniqueId] = CdrData({
+        // Create a new CdrData struct and store it in the cdrs mapping for the sender's address
+        cdrs[msg.sender][uniqueId] = CdrData({
             hashValue: hashValue,
-            timestamp: block.timestamp, // current block time
-            sender: msg.sender // address of the sender that inserted the CDR
+            timestamp: block.timestamp // current block time
         });
 
         // Emit the event that a new Cdr is inserted
@@ -29,11 +27,11 @@ contract CdrContract {
     }
 
     // Function to view a CDR and its details - used by the verification service
-    function viewCdr(uint256 uniqueId) public view returns (string memory, uint256, address) {
-        require(bytes(cdrs[uniqueId].hashValue).length > 0, "CDR does not exist.");
+    function viewCdr(address originator, uint256 uniqueId) public view returns (string memory, uint256) {
+        require(bytes(cdrs[originator][uniqueId].hashValue).length > 0, "CDR does not exist.");
 
-        CdrData memory cdrData = cdrs[uniqueId];
-        return (cdrData.hashValue, cdrData.timestamp, cdrData.sender);
+        CdrData memory cdrData = cdrs[originator][uniqueId];
+        return (cdrData.hashValue, cdrData.timestamp);
     }
     
 }
