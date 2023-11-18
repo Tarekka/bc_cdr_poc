@@ -56,7 +56,7 @@ async function VerifyCdr(address, cdr) {
     else {
       console.error("An error occurred:", error.message);
     }
-    return `${cdr.Id},${Results.Error}`; // 
+    return `${cdr.Id},${Results.Error}`; // An error occured
   }
 }
 
