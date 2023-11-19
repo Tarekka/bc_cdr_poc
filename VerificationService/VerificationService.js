@@ -66,20 +66,18 @@ const hashCdr = (cdr) => {
   return crypto.createHash("sha256").update(cdrString).digest("hex");
 };
 
-// Function to read CSV file and process each line
+// Function to read CSV file and call VerifyCdr for each line
 function processCSV(filePath, address) {
   return new Promise((resolve, reject) => {
     const results = [];
-    fs.createReadStream(filePath)
-      .pipe(csv())
+    fs.createReadStream(filePath).pipe(csv())
       .on("data", (row) => {
         results.push(VerifyCdr(address, row));
       })
       .on("end", () => {
-        Promise.all(results)
-          .then((resultsToWrite) => {
+        Promise.all(results).then((resultsToWrite) => {
             // Write all the results to a new file, with the same file name but .results.csv suffix
-            writeToFile(resultsToWrite, filePath + ".results.txt");
+            writeToFile(resultsToWrite, filePath + ".results.csv");
             console.log("CDRs successfully processed");
             resolve();
           })
@@ -90,7 +88,7 @@ function processCSV(filePath, address) {
 
 // Function that write the results to a new file
 function writeToFile(data, fileName) {
-  const content = data.join("\n");
+  const content = "Id,Result\n" + data.join("\n");
   fs.writeFile(fileName, content, (err) => {
     if (err) {
       return console.error(
